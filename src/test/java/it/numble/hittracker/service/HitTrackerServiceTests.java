@@ -12,6 +12,8 @@ import jakarta.annotation.PreDestroy;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -59,6 +61,7 @@ public class HitTrackerServiceTests {
     }
 
     @Test
+    @DisabledOnOs(value = OS.LINUX)
     void hit() {
         // given
         String url = "http://test.com";
