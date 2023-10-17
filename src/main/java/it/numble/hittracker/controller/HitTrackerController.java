@@ -1,8 +1,8 @@
 package it.numble.hittracker.controller;
 
-import it.numble.hittracker.controller.response.Response;
-import it.numble.hittracker.controller.response.UrlHitInfoResponse;
-import it.numble.hittracker.controller.response.dto.Empty;
+import it.numble.hittracker.common.response.DataResponseBody;
+import it.numble.hittracker.common.response.BaseResponseBody;
+import it.numble.hittracker.controller.dto.UrlHitInfoResponse;
 import it.numble.hittracker.entity.DailyHitLog;
 import it.numble.hittracker.service.HitTrackerService;
 import java.util.List;
@@ -19,19 +19,19 @@ public class HitTrackerController {
     private final HitTrackerService hitTrackerService;
 
     @GetMapping("/count")
-    public Response<UrlHitInfoResponse> getHitInfo(@RequestParam String url) {
+    public DataResponseBody<UrlHitInfoResponse> getHitInfo(@RequestParam String url) {
         UrlHitInfoResponse urlHitInfoResponse = hitTrackerService.getHitInfo(url);
-        return Response.okWithDetail(urlHitInfoResponse);
+        return DataResponseBody.ok(urlHitInfoResponse);
     }
 
     @PostMapping("/count")
-    public Response<Empty> hit(@RequestParam String url) {
+    public BaseResponseBody hit(@RequestParam String url) {
         hitTrackerService.hit(url);
-        return Response.ok();
+        return BaseResponseBody.ok();
     }
 
     @GetMapping("/statistics")
-    public Response<List<DailyHitLog>> statistics(@RequestParam String url) {
-        return Response.okWithDetail(hitTrackerService.getStatistics(url));
+    public DataResponseBody<List<DailyHitLog>> statistics(@RequestParam String url) {
+        return DataResponseBody.ok(hitTrackerService.getStatistics(url));
     }
 }

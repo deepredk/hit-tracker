@@ -1,4 +1,4 @@
-package it.numble.hittracker.controller.response;
+package it.numble.hittracker.controller.dto;
 
 import lombok.Getter;
 

@@ -1,7 +1,6 @@
 package it.numble.hittracker.service;
 
-import it.numble.hittracker.common.config.redis.RedisProperties;
-import it.numble.hittracker.controller.response.UrlHitInfoResponse;
+import it.numble.hittracker.controller.dto.UrlHitInfoResponse;
 import it.numble.hittracker.entity.DailyHitLog;
 import it.numble.hittracker.entity.Url;
 import it.numble.hittracker.repository.DailyHitLogRepository;
@@ -127,8 +126,8 @@ class TestRedisConfiguration {
 
     private final RedisServer redisServer;
 
-    public TestRedisConfiguration(RedisProperties redisProperties) throws IOException {
-        this.redisServer = new RedisServer(redisProperties.getRedisPort());
+    public TestRedisConfiguration() throws IOException {
+        this.redisServer = new RedisServer(6370);
     }
 
     @PostConstruct
