@@ -36,4 +36,8 @@ public class HitRepository {
     public void deleteTodayHit(String url) {
         redisTemplate.opsForValue().getAndDelete(url + ".todayHit");
     }
+
+    public void flushAll() {
+        redisTemplate.getConnectionFactory().getConnection().flushAll();
+    }
 }

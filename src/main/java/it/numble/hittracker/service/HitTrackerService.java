@@ -6,8 +6,9 @@ import it.numble.hittracker.entity.Url;
 import it.numble.hittracker.repository.DailyHitLogRepository;
 import it.numble.hittracker.repository.HitRepository;
 import it.numble.hittracker.repository.UrlRepository;
+
+import java.time.Clock;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -39,22 +40,21 @@ public class HitTrackerService {
     }
 
     public List<DailyHitLog> getStatistics(String url) {
-        return urlRepository.findByUrl(url).orElseThrow().getDailyHitLogs();
+        Url savedUrl = urlRepository.findByUrl(url).orElseGet(() -> urlRepository.save(new Url(url)));
+        return dailyHitLogRepository.findAllByUrl(savedUrl);
     }
 
-    public void tomorrow() {
+    public void tomorrow(Clock clock) {
         List<DailyHitLog> logs = dailyHitLogRepository.findAll();
-        LocalDate today = LocalDate.now().minusDays(1);
+        LocalDate today = LocalDate.now(clock).minusDays(1);
 
         // 일간조회수 모두 0으로 초기화 및 저장
         List<Url> urls = urlRepository.findAll();
         for (Url url : urls) {
-            DailyHitLog dailyHitLog = new DailyHitLog(today, hitRepository.getTodayHit(url.getUrl()));
-            DailyHitLog savedDailyHitLog = dailyHitLogRepository.save(dailyHitLog);
+            DailyHitLog dailyHitLog = new DailyHitLog(today, hitRepository.getTodayHit(url.getUrl()), url);
+            dailyHitLogRepository.save(dailyHitLog);
 
             hitRepository.deleteTodayHit(url.getUrl());
-            url.addLog(savedDailyHitLog);
-            urlRepository.save(url);
         }
 
         // 7일이 지난 일간조회수는 삭제

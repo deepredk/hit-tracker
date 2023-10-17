@@ -24,20 +24,16 @@ public class HitTrackerRepositoryTests {
     @Test
     void Url_및_DailyHitLog_신규_저장() {
         Url url = new Url("https://example.com");
-        urlRepository.save(url);
+        Url savedUrl = urlRepository.save(url);
 
         LocalDate today = LocalDate.now();
-        DailyHitLog dailyHitLog = new DailyHitLog(today, 100);
+        DailyHitLog dailyHitLog = new DailyHitLog(today, 100, savedUrl);
 
-        DailyHitLog savedDailyHitLog = dailyHitLogRepository.save(dailyHitLog);
+        dailyHitLogRepository.save(dailyHitLog);
 
-        url.getDailyHitLogs().add(savedDailyHitLog);
-        urlRepository.save(url);
-
+        List<DailyHitLog> dailyHitLogs = dailyHitLogRepository.findAllByUrl(url);
         Url updatedUrl = urlRepository.findById(url.getId()).orElse(null);
         assertThat(updatedUrl).isNotNull();
-
-        List<DailyHitLog> dailyHitLogs = updatedUrl.getDailyHitLogs();
         assertThat(dailyHitLogs).isNotNull();
         assertThat(dailyHitLogs).hasSize(1);
         assertThat(dailyHitLogs.get(0).getDate()).isEqualTo(today);
