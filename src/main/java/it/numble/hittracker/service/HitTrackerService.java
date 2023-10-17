@@ -3,6 +3,7 @@ package it.numble.hittracker.service;
 import it.numble.hittracker.controller.dto.UrlHitInfoDto;
 import it.numble.hittracker.entity.DailyHitLog;
 import it.numble.hittracker.entity.Url;
+import it.numble.hittracker.repository.IsCreatedUrlRepository;
 import it.numble.hittracker.repository.DailyHitLogRepository;
 import it.numble.hittracker.repository.HitRepository;
 import it.numble.hittracker.repository.UrlRepository;
@@ -21,6 +22,7 @@ public class HitTrackerService {
     private final UrlRepository urlRepository;
     private final DailyHitLogRepository dailyHitLogRepository;
     private final HitRepository hitRepository;
+    private final IsCreatedUrlRepository isCreatedUrlRepository;
 
     public UrlHitInfoDto getHitInfo(String url) {
         if (!isExistsUrl(url)) {
@@ -37,6 +39,10 @@ public class HitTrackerService {
     @Async
     public void hit(String url) {
         hitRepository.hit(url);
+
+        if (!isExistsUrl(url)) {
+            track(url);
+        }
     }
 
     public List<DailyHitLog> getStatistics(String url) {
@@ -68,12 +74,13 @@ public class HitTrackerService {
                 .forEach(dailyHitLogRepository::delete);
     }
 
+    @Async
     private void track(String url) {
         Url urlBeingTracked = new Url(url);
         urlRepository.save(urlBeingTracked);
     }
 
     private boolean isExistsUrl(String url) {
-        return urlRepository.existsByUrl(url);
+        return isCreatedUrlRepository.create(url) == 1L;
     }
 }
