@@ -39,6 +39,10 @@ public class HitTrackerService {
     @Async
     public void hit(String url) {
         hitRepository.hit(url);
+
+        if (!isExistsUrl(url)) {
+            track(url);
+        }
     }
 
     public List<DailyHitLog> getStatistics(String url) {
