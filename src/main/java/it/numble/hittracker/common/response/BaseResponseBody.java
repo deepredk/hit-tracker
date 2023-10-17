@@ -25,5 +25,6 @@ public class BaseResponseBody {
 }
 
 enum Status {
+
     SUCCESS, ERROR
 }

@@ -11,5 +11,4 @@ public class HitTrackerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HitTrackerApplication.class, args);
 	}
-
 }

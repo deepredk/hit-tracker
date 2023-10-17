@@ -9,5 +9,4 @@ class HitTrackerApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

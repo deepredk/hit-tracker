@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class UrlHitInfoDto {
+
     private String url;
     private int todayHit;
     private int totalHit;
