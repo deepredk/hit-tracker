@@ -6,7 +6,7 @@
 docker-compose up -d
 ```
 
-위 명령어를 실행하여 mysql, redis 환경을 구성한 뒤 실행하시면 정상 작동됩니다.
+위 명령어를 실행하여 mysql, redis 환경을 구성한 뒤 실행하시면 바로 프로젝트를 실행 및 테스트 하실 수 있습니다.
 
 ## 구조도
 
@@ -43,6 +43,8 @@ CREATE TABLE IF NOT EXISTS DailyHitLog (
 - 원자성이 보장되는 Redis의 incr 명령어를 이용하여 총 조회수와 일간 조회수를 보관합니다.
   - 일간 조회수, 총 조회수는 오직 Redis에서만 보관합니다.
 - Redis쪽에 요청보내는 것은 동기적으로 실행하지 않고 비동기적으로 실행합니다.
+- 처음 요청된 url이라면 MySQL의 Url 테이블에 행을 추가합니다.
+  - Redis의 sadd 명령어를 이용하여 처음 요청됐는지 확인합니다
 
 ### GET /count?url={url}
 
