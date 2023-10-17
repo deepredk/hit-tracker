@@ -6,6 +6,7 @@ import it.numble.hittracker.entity.Url;
 import it.numble.hittracker.exception.UrlAlreadyBeingTrackedException;
 import it.numble.hittracker.exception.UrlNotBeingTrackedException;
 import it.numble.hittracker.repository.DailyHitLogRepository;
+import it.numble.hittracker.repository.HitRepository;
 import it.numble.hittracker.repository.UrlRepository;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -19,37 +20,22 @@ public class HitTrackerService {
 
     private final UrlRepository urlRepository;
     private final DailyHitLogRepository dailyHitLogRepository;
-
-    public void track(String url) {
-        if (isExistsUrl(url)) {
-            throw new UrlAlreadyBeingTrackedException();
-        }
-
-        UrlBeingTracked urlBeingTracked = new UrlBeingTracked(url);
-        urlRepository.save(urlBeingTracked);
-    }
-
-    private boolean isExistsUrl(String url) {
-        return urlRepository.existsByUrl(url);
-    }
+    private final HitRepository hitRepository;
 
     public UrlHitInfoResponse getHitInfo(String url) {
-        UrlBeingTracked urlBeingTracked = urlRepository.findByUrl(url)
-            .orElseThrow(UrlNotBeingTrackedException::new);
+        if (!isExistsUrl(url)) {
+            track(url);
+        }
 
         return new UrlHitInfoResponse(
             url,
-            urlBeingTracked.getDailyHit(),
-            urlBeingTracked.getTotalHit()
+            hitRepository.getTodayHit(url),
+            hitRepository.getTotalHit(url)
         );
     }
 
     public void hit(String url) {
-        UrlBeingTracked urlBeingTracked = urlRepository.findByUrl(url)
-            .orElseThrow(UrlNotBeingTrackedException::new);
-
-        urlBeingTracked.hit();
-        urlRepository.save(urlBeingTracked);
+        hitRepository.hit(url);
     }
 
     public void tomorrow() {
@@ -57,13 +43,13 @@ public class HitTrackerService {
         LocalDate today = logs.stream().map(DailyHitLog::getDate).max(Comparator.naturalOrder()).orElse(LocalDate.now()).plusDays(1);
 
         // 일간조회수 모두 0으로 초기화 및 저장
-        List<UrlBeingTracked> urls = urlRepository.findAll();
-        for (UrlBeingTracked url : urls) {
-            DailyHitLog dailyHitLog = new DailyHitLog(today, url.getDailyHit());
+        List<Url> urls = urlRepository.findAll();
+        for (Url url : urls) {
+            DailyHitLog dailyHitLog = new DailyHitLog(today, hitRepository.getTodayHit(url.getUrl()));
             DailyHitLog savedDailyHitLog = dailyHitLogRepository.save(dailyHitLog);
 
+            hitRepository.deleteTodayHit(url.getUrl());
             url.addLog(savedDailyHitLog);
-            url.initiailizeDailyHit();
             urlRepository.save(url);
         }
 
@@ -73,5 +59,14 @@ public class HitTrackerService {
 
     public List<DailyHitLog> getStatistics(String url) {
         return urlRepository.findByUrl(url).orElseThrow().getDailyHitLogs();
+    }
+
+    private void track(String url) {
+        Url urlBeingTracked = new Url(url);
+        urlRepository.save(urlBeingTracked);
+    }
+
+    private boolean isExistsUrl(String url) {
+        return urlRepository.existsByUrl(url);
     }
 }

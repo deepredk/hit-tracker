@@ -18,12 +18,6 @@ public class HitTrackerController {
 
     private final HitTrackerService hitTrackerService;
 
-    @PostMapping("/track")
-    public Response<Empty> track(@RequestParam String url) {
-        hitTrackerService.track(url);
-        return Response.ok();
-    }
-
     @GetMapping("/count")
     public Response<UrlHitInfoResponse> getHitInfo(@RequestParam String url) {
         UrlHitInfoResponse urlHitInfoResponse = hitTrackerService.getHitInfo(url);
