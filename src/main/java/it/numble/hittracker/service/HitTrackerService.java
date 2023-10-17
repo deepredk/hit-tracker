@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,6 +33,7 @@ public class HitTrackerService {
         );
     }
 
+    @Async
     public void hit(String url) {
         hitRepository.hit(url);
     }
