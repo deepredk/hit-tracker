@@ -1,8 +1,8 @@
-package it.numble.hittracker.exception.handler;
+package it.numble.hittracker.common.exception.handler;
 
 import it.numble.hittracker.controller.response.Response;
 import it.numble.hittracker.controller.response.dto.Empty;
-import it.numble.hittracker.exception.BaseException;
+import it.numble.hittracker.common.exception.BaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

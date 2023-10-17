@@ -1,4 +1,4 @@
-package it.numble.hittracker;
+package it.numble.hittracker.common.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
