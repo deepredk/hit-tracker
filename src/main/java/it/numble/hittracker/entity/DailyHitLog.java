@@ -27,8 +27,7 @@ public class DailyHitLog {
     @Column(nullable = false)
     private int dailyHit;
     @ManyToOne
-    @JoinColumn(name = "url_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "url_id", nullable = false)
     private Url url;
 
     public DailyHitLog(LocalDate date, int dailyHit, Url url) {
