@@ -10,3 +10,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  data:
+    redis:
+      port: 6370
+      host: localhost
