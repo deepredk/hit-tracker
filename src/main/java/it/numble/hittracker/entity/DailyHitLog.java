@@ -22,10 +22,12 @@ public class DailyHitLog {
     private Long id;
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @Column(nullable = false)
     private LocalDate date;
+    @Column(nullable = false)
     private int dailyHit;
     @ManyToOne
-    @JoinColumn(name = "url_id")
+    @JoinColumn(name = "url_id", nullable = false)
     private Url url;
 
     public DailyHitLog(LocalDate date, int dailyHit, Url url) {
