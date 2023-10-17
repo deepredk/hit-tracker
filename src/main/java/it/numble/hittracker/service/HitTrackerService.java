@@ -3,8 +3,6 @@ package it.numble.hittracker.service;
 import it.numble.hittracker.controller.response.UrlHitInfoResponse;
 import it.numble.hittracker.entity.DailyHitLog;
 import it.numble.hittracker.entity.Url;
-import it.numble.hittracker.exception.UrlAlreadyBeingTrackedException;
-import it.numble.hittracker.exception.UrlNotBeingTrackedException;
 import it.numble.hittracker.repository.DailyHitLogRepository;
 import it.numble.hittracker.repository.HitRepository;
 import it.numble.hittracker.repository.UrlRepository;
