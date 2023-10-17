@@ -1,6 +1,6 @@
 package it.numble.hittracker.service;
 
-import it.numble.hittracker.controller.dto.UrlHitInfoResponse;
+import it.numble.hittracker.controller.dto.UrlHitInfoDto;
 import it.numble.hittracker.entity.DailyHitLog;
 import it.numble.hittracker.entity.Url;
 import it.numble.hittracker.repository.DailyHitLogRepository;
@@ -52,7 +52,7 @@ public class HitTrackerServiceTests {
         hitRepository.hit(url);
 
         // when
-        UrlHitInfoResponse hitInfo = hitTrackerService.getHitInfo(url);
+        UrlHitInfoDto hitInfo = hitTrackerService.getHitInfo(url);
 
         // then
         assertThat(hitInfo.getTodayHit()).isEqualTo(1);

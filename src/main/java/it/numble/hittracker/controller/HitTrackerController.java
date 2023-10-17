@@ -2,7 +2,7 @@ package it.numble.hittracker.controller;
 
 import it.numble.hittracker.common.response.DataResponseBody;
 import it.numble.hittracker.common.response.BaseResponseBody;
-import it.numble.hittracker.controller.dto.UrlHitInfoResponse;
+import it.numble.hittracker.controller.dto.UrlHitInfoDto;
 import it.numble.hittracker.entity.DailyHitLog;
 import it.numble.hittracker.service.HitTrackerService;
 import java.util.List;
@@ -19,9 +19,9 @@ public class HitTrackerController {
     private final HitTrackerService hitTrackerService;
 
     @GetMapping("/count")
-    public DataResponseBody<UrlHitInfoResponse> getHitInfo(@RequestParam String url) {
-        UrlHitInfoResponse urlHitInfoResponse = hitTrackerService.getHitInfo(url);
-        return DataResponseBody.ok(urlHitInfoResponse);
+    public DataResponseBody<UrlHitInfoDto> getHitInfo(@RequestParam String url) {
+        UrlHitInfoDto urlHitInfoDto = hitTrackerService.getHitInfo(url);
+        return DataResponseBody.ok(urlHitInfoDto);
     }
 
     @PostMapping("/count")

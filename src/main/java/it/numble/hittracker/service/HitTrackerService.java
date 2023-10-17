@@ -1,6 +1,6 @@
 package it.numble.hittracker.service;
 
-import it.numble.hittracker.controller.dto.UrlHitInfoResponse;
+import it.numble.hittracker.controller.dto.UrlHitInfoDto;
 import it.numble.hittracker.entity.DailyHitLog;
 import it.numble.hittracker.entity.Url;
 import it.numble.hittracker.repository.DailyHitLogRepository;
@@ -22,12 +22,12 @@ public class HitTrackerService {
     private final DailyHitLogRepository dailyHitLogRepository;
     private final HitRepository hitRepository;
 
-    public UrlHitInfoResponse getHitInfo(String url) {
+    public UrlHitInfoDto getHitInfo(String url) {
         if (!isExistsUrl(url)) {
             track(url);
         }
 
-        return new UrlHitInfoResponse(
+        return new UrlHitInfoDto(
             url,
             hitRepository.getTodayHit(url),
             hitRepository.getTotalHit(url)
