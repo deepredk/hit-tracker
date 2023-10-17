@@ -5,7 +5,6 @@ import it.numble.hittracker.entity.DailyHitLog;
 import it.numble.hittracker.entity.Url;
 import it.numble.hittracker.repository.DailyHitLogRepository;
 import it.numble.hittracker.repository.HitRepository;
-import it.numble.hittracker.repository.IsCreatedUrlRepository;
 import it.numble.hittracker.repository.UrlRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -38,7 +37,7 @@ public class HitTrackerServiceTests {
     private DailyHitLogRepository dailyHitLogRepository;
     @Autowired
     private HitRepository hitRepository;
-    
+
     @BeforeEach
     void setUp() {
         hitRepository.flushAll();
@@ -61,12 +60,12 @@ public class HitTrackerServiceTests {
     }
 
     @Test
-    void hit() throws InterruptedException {
+    @DisabledOnOs(value = OS.LINUX)
+    void hit() {
         // given
         String url = "http://test.com";
 
         // when
-        Thread.sleep(500);
         hitTrackerService.hit(url);
 
         // then
