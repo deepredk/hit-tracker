@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import it.numble.hittracker.entity.DailyHitLog;
-import it.numble.hittracker.entity.UrlBeingTracked;
+import it.numble.hittracker.entity.Url;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -23,21 +23,21 @@ public class HitTrackerRepositoryTests {
 
     @Test
     void Url_및_DailyHitLog_신규_저장() {
-        UrlBeingTracked urlBeingTracked = new UrlBeingTracked("https://example.com");
-        urlRepository.save(urlBeingTracked);
+        Url url = new Url("https://example.com");
+        urlRepository.save(url);
 
         LocalDate today = LocalDate.now();
         DailyHitLog dailyHitLog = new DailyHitLog(today, 100);
 
         DailyHitLog savedDailyHitLog = dailyHitLogRepository.save(dailyHitLog);
 
-        urlBeingTracked.getDailyHitLogs().add(savedDailyHitLog);
-        urlRepository.save(urlBeingTracked);
+        url.getDailyHitLogs().add(savedDailyHitLog);
+        urlRepository.save(url);
 
-        UrlBeingTracked updatedUrlBeingTracked = urlRepository.findById(urlBeingTracked.getId()).orElse(null);
-        assertThat(updatedUrlBeingTracked).isNotNull();
+        Url updatedUrl = urlRepository.findById(url.getId()).orElse(null);
+        assertThat(updatedUrl).isNotNull();
 
-        List<DailyHitLog> dailyHitLogs = updatedUrlBeingTracked.getDailyHitLogs();
+        List<DailyHitLog> dailyHitLogs = updatedUrl.getDailyHitLogs();
         assertThat(dailyHitLogs).isNotNull();
         assertThat(dailyHitLogs).hasSize(1);
         assertThat(dailyHitLogs.get(0).getDate()).isEqualTo(today);
