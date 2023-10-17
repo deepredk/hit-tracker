@@ -30,12 +30,6 @@ public class HitTrackerController {
         return Response.ok();
     }
 
-    @PostMapping("/tomorrow")
-    public Response<Empty> tomorrow() {
-        hitTrackerService.tomorrow();
-        return Response.ok();
-    }
-
     @GetMapping("/statistics")
     public Response<List<DailyHitLog>> statistics(@RequestParam String url) {
         return Response.okWithDetail(hitTrackerService.getStatistics(url));

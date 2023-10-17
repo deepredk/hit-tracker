@@ -38,9 +38,13 @@ public class HitTrackerService {
         hitRepository.hit(url);
     }
 
+    public List<DailyHitLog> getStatistics(String url) {
+        return urlRepository.findByUrl(url).orElseThrow().getDailyHitLogs();
+    }
+
     public void tomorrow() {
         List<DailyHitLog> logs = dailyHitLogRepository.findAll();
-        LocalDate today = logs.stream().map(DailyHitLog::getDate).max(Comparator.naturalOrder()).orElse(LocalDate.now()).plusDays(1);
+        LocalDate today = LocalDate.now().minusDays(1);
 
         // 일간조회수 모두 0으로 초기화 및 저장
         List<Url> urls = urlRepository.findAll();
@@ -55,10 +59,6 @@ public class HitTrackerService {
 
         // 7일이 지난 일간조회수는 삭제
         logs.stream().filter(log -> log.isSevenDaysAgo(today)).forEach(dailyHitLogRepository::delete);
-    }
-
-    public List<DailyHitLog> getStatistics(String url) {
-        return urlRepository.findByUrl(url).orElseThrow().getDailyHitLogs();
     }
 
     private void track(String url) {
