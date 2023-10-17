@@ -39,7 +39,8 @@ public class HitTrackerService {
     }
 
     public List<DailyHitLog> getStatistics(String url) {
-        return urlRepository.findByUrl(url).orElseThrow().getDailyHitLogs();
+        Url savedUrl = urlRepository.findByUrl(url).orElseGet(() -> urlRepository.save(new Url(url)));
+        return dailyHitLogRepository.findAllByUrl(savedUrl);
     }
 
     public void tomorrow() {
@@ -49,12 +50,10 @@ public class HitTrackerService {
         // 일간조회수 모두 0으로 초기화 및 저장
         List<Url> urls = urlRepository.findAll();
         for (Url url : urls) {
-            DailyHitLog dailyHitLog = new DailyHitLog(today, hitRepository.getTodayHit(url.getUrl()));
+            DailyHitLog dailyHitLog = new DailyHitLog(today, hitRepository.getTodayHit(url.getUrl()), url);
             DailyHitLog savedDailyHitLog = dailyHitLogRepository.save(dailyHitLog);
 
             hitRepository.deleteTodayHit(url.getUrl());
-            url.addLog(savedDailyHitLog);
-            urlRepository.save(url);
         }
 
         // 7일이 지난 일간조회수는 삭제

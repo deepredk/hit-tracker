@@ -4,11 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,10 +24,14 @@ public class DailyHitLog {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate date;
     private int dailyHit;
+    @ManyToOne
+    @JoinColumn(name = "url_id")
+    private Url url;
 
-    public DailyHitLog(LocalDate date, int dailyHit) {
+    public DailyHitLog(LocalDate date, int dailyHit, Url url) {
         this.date = date;
         this.dailyHit = dailyHit;
+        this.url = url;
     }
 
     public boolean isSevenDaysAgo(LocalDate today) {

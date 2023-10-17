@@ -2,6 +2,8 @@ package it.numble.hittracker.service;
 
 import it.numble.hittracker.common.config.redis.RedisProperties;
 import it.numble.hittracker.controller.response.UrlHitInfoResponse;
+import it.numble.hittracker.entity.DailyHitLog;
+import it.numble.hittracker.entity.Url;
 import it.numble.hittracker.repository.DailyHitLogRepository;
 import it.numble.hittracker.repository.HitRepository;
 import it.numble.hittracker.repository.UrlRepository;
@@ -14,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import redis.embedded.RedisServer;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -34,6 +39,8 @@ public class HitTrackerServiceTests {
     @BeforeEach
     void setUp() {
         hitRepository.flushAll();
+        urlRepository.deleteAll();
+        dailyHitLogRepository.deleteAll();
     }
 
     @Test
@@ -61,6 +68,21 @@ public class HitTrackerServiceTests {
         // then
         assertThat(hitRepository.getTodayHit(url)).isEqualTo(1);
         assertThat(hitRepository.getTotalHit(url)).isEqualTo(1);
+    }
+
+    @Test
+    void getStatistics() {
+        // given
+        String url = "http://test.com";
+        Url savedUrl = urlRepository.save(new Url(url));
+        DailyHitLog savedLog = dailyHitLogRepository.save(new DailyHitLog(LocalDate.of(2020, 1, 1), 3, savedUrl));
+
+        // when
+        List<DailyHitLog> dailyHitLogs = hitTrackerService.getStatistics(url);
+
+        // then
+        assertThat(dailyHitLogs.size()).isEqualTo(1);
+        assertThat(dailyHitLogs.get(0)).isEqualTo(savedLog);
     }
 }
 

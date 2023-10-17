@@ -22,16 +22,8 @@ public class Url {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String url;
-    @OneToMany
-    @JoinColumn(name = "url_id")
-    private List<DailyHitLog> dailyHitLogs;
 
     public Url(String url) {
         this.url = url;
-        this.dailyHitLogs = new ArrayList<>();
-    }
-
-    public void addLog(DailyHitLog savedDailyHitLog) {
-        dailyHitLogs.add(savedDailyHitLog);
     }
 }
