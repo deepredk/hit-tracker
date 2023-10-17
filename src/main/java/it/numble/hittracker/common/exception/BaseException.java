@@ -1,4 +1,4 @@
-package it.numble.hittracker.exception;
+package it.numble.hittracker.common.exception;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
