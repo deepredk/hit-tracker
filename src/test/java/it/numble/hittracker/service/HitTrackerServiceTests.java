@@ -127,7 +127,7 @@ class TestRedisConfiguration {
     private final RedisServer redisServer;
 
     public TestRedisConfiguration() throws IOException {
-        this.redisServer = new RedisServer(6379);
+        this.redisServer = new RedisServer(6380);
     }
 
     @PostConstruct
