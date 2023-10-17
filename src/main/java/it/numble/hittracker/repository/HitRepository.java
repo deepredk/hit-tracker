@@ -1,17 +1,15 @@
 package it.numble.hittracker.repository;
 
 import it.numble.hittracker.entity.Url;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class HitRepository {
 
     private final RedisTemplate<String, String> redisTemplate;
-
-    public HitRepository(RedisTemplate<String, String> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
 
     public void hit(String url) {
         redisTemplate
