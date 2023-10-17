@@ -7,6 +7,8 @@ import it.numble.hittracker.repository.HitRepository;
 import it.numble.hittracker.repository.UrlRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +18,7 @@ import redis.embedded.RedisServer;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(classes = TestRedisConfiguration.class)
+@Transactional
 public class HitTrackerServiceTests {
 
     @Autowired
@@ -27,6 +30,11 @@ public class HitTrackerServiceTests {
     private DailyHitLogRepository dailyHitLogRepository;
     @Autowired
     private HitRepository hitRepository;
+
+    @BeforeEach
+    void setUp() {
+        hitRepository.flushAll();
+    }
 
     @Test
     void getHitInfo() {
@@ -40,6 +48,19 @@ public class HitTrackerServiceTests {
         // then
         assertThat(hitInfo.getTodayHit()).isEqualTo(1);
         assertThat(hitInfo.getTotalHit()).isEqualTo(1);
+    }
+
+    @Test
+    void hit() {
+        // given
+        String url = "http://test.com";
+
+        // when
+        hitTrackerService.hit(url);
+
+        // then
+        assertThat(hitRepository.getTodayHit(url)).isEqualTo(1);
+        assertThat(hitRepository.getTotalHit(url)).isEqualTo(1);
     }
 }
 
