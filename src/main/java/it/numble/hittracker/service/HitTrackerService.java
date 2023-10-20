@@ -14,9 +14,11 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class HitTrackerService {
 
     private final UrlRepository urlRepository;
@@ -75,7 +77,7 @@ public class HitTrackerService {
     }
 
     @Async
-    private void track(String url) {
+    protected void track(String url) {
         Url urlBeingTracked = new Url(url);
         urlRepository.save(urlBeingTracked);
     }
